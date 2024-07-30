@@ -1,6 +1,6 @@
 version: '3.9'
 services:
-  lara_php:
+  php:
     build: ./docker/php
     working_dir: '/var/www/domains'
     networks:
@@ -10,7 +10,7 @@ services:
     expose:
       - 9000
 
-  lara_nginx:
+  nginx:
     image: nginx:1.21.1
     networks:
       - project_network
@@ -20,7 +20,7 @@ services:
     ports:
       - "127.0.0.1:8080:80"
 
-  lara_cron:
+  cron:
     build: ./docker/cron
     working_dir: /var/www/domains
     networks:
@@ -28,7 +28,7 @@ services:
     volumes:
       - ./project:/var/www/domains/project:cached
 
-  lara_mysql:
+  mysql:
     image: "mysql/mysql-server:8.0"
     volumes:
       - laravel_db:/var/lib/mysql
@@ -43,7 +43,7 @@ services:
     networks:
       - project_network
 
-  lara_edis:
+  redis:
     image: redis
     expose:
       - 6379
@@ -52,7 +52,7 @@ services:
     volumes:
       - laravel_redis_db:/data:cached
 
-  lara_adminer:
+  adminer:
     image: adminer
     restart: always
     ports:
