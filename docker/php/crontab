@@ -1,0 +1,5 @@
+SHELL=/bin/sh
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+
+* * * * * www-data /usr/local/bin/php /var/www/domains/project/artisan schedule:run >> /var/www/domains/project/storage/logs/cron.log 2>&1
+#last row

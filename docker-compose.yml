@@ -1,4 +1,4 @@
-version: '3.9'
+
 services:
   php:
     build: ./docker/php
@@ -13,25 +13,17 @@ services:
   nginx:
     image: nginx:1.21.1
     networks:
-      - project_network
+      - ${NETWORK}
     volumes:
       - ./project:/var/www/domains/project:cached
       - ./docker/nginx:/etc/nginx/conf.d:cached
     ports:
       - "127.0.0.1:8080:80"
 
-  cron:
-    build: ./docker/cron
-    working_dir: /var/www/domains
-    networks:
-      - project_network
-    volumes:
-      - ./project:/var/www/domains/project:cached
-
   mysql:
     image: "mysql/mysql-server:8.0"
     volumes:
-      - laravel_db:/var/lib/mysql
+      - ${DB_VOLUME}:/var/lib/mysql
     command: --default-authentication-plugin=mysql_native_password && --character-set-server=utf8mb3_general_ci
     environment:
       MYSQL_ROOT_PASSWORD: "${DB_PASSWORD}"
@@ -41,27 +33,26 @@ services:
     expose:
       - 3306
     networks:
-      - project_network
+      - ${NETWORK}
 
   redis:
     image: redis
     expose:
       - 6379
     networks:
-      - project_network
+      - ${NETWORK}
     volumes:
-      - laravel_redis_db:/data:cached
+      - ${REDIS_VOLUME}:/data:cached
 
   adminer:
     image: adminer
-    restart: always
     ports:
       - "127.0.0.1:8081:8080"
     networks:
-      - project_network
+      - ${NETWORK}
     environment:
       ADMINER_DESIGN: haeckel
-      ADMINER_DEFAULT_SERVER: g-mysql
+      ADMINER_DEFAULT_SERVER: laravel-template-mysql-1
 
 networks:
   project_network:
@@ -69,7 +60,7 @@ networks:
 
 
 volumes:
-  laravel_db:
+  laravel-template-db:
     external: true
-  laravel_redis_db:
+  laravel-template-redis-db:
     external: true
