@@ -1,2 +1,6 @@
 .env
 **/.DS_Store
+.idea
+*.mysql
+*.zip
+project
