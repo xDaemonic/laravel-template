@@ -17,3 +17,5 @@ create:
 	&& cd ../ && docker compose build \
 	&& docker volume create ${DB_VOLUME} && docker volume create ${REDIS_VOLUME}
 
+pb:
+	docker exec -it laravel-template-php-1 bash
